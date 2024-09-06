@@ -41,8 +41,11 @@ Extension package for <code>tkintertools</code> to <code>matplotlib</code>
 pip install tkintertools-mpl
 ```
 
-or
+### 👀 Preview / 预览
 
-```
-pip install tkintertools[extension]==3.0.0rc1
-```
+![preview-1](./preview-1.png)
+![preview-2](./preview-2.png)
+
+### 🔗 Links / 相关链接
+
+* `tkintertools`: https://github.com/Xiaokang2022/tkintertools

@@ -1,2 +1,2 @@
 tkintertools==3.0.0rc1
-matplotlib
+matplotlib>=3.7.0

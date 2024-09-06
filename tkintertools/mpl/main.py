@@ -76,9 +76,10 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
                 case "figure": self.figure.set(**{keys[-1]: value})
                 case "grid":
                     for axes in self.figure.axes:
-                        # BUG: It not work now
-                        # if getattr(axes.xaxis, "_gridOnMinor", None):
-                        axes.grid(color=value)
+                        # NOTE: A private approach is used,
+                        # and there may be issues in future releases
+                        if axes.xaxis._major_tick_kw["gridOn"]:
+                            axes.grid(color=value)
                 case "axes3d":
                     for axes in self.figure.axes:
                         if isinstance(axes, mpl_toolkits.mplot3d.Axes3D):
@@ -156,15 +157,26 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         if dark:
             self["bg"] = "#303030"
             for name, child in self.children.items():
-                child["bg"] = "#303030"
+                child["bg"] = self["bg"]
                 if name.startswith("!label"):
                     child["fg"] = "#F1F1F1"
+                elif name.startswith("!frame"):
+                    child["bg"] = "#565656"
+                else:
+                    child["fg"] = "#D3D3D3"
+
         else:
             self["bg"] = "#F0F0F0"
             for name, child in self.children.items():
-                child["bg"] = "#F0F0F0"
+                child["bg"] = self["bg"]
                 if name.startswith("!label"):
-                    child["fg"] = "#F1F1F1"
+                    child["fg"] = "#000000"
+                elif name.startswith("!frame"):
+                    child["bg"] = "#A9A9A9"
+                else:
+                    child["fg"] = "#000000"
+
+        self._rescale()
 
     # @typing.override
     def destroy(self) -> None:
