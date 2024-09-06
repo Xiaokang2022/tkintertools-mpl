@@ -13,6 +13,21 @@ Changelog / 更新日志
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+🔖 `1.1.0`
+----------
+
+🕓 *Release Date / 发布日期 : 2024-09-06*
+
+🟢 **Added / 新增**
+
+- The theme color dictionary has added the adaptation of text in the window  
+主题颜色字典新增了窗口内文本的适配
+
+🟡 **Changed / 变更**
+
+- The parameter `dark` of the function `set_mpl_default_theme` was renamed to `theme` and the value was changed from a boolean type to `"light"` 或 `"dark"`  
+函数 `set_mpl_default_theme` 的参数 `dark` 更名为 `theme`，值由布尔类型变更为 `"light"` 或 `"dark"`
+
 🔖 `1.0.1`
 ----------
 

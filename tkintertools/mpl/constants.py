@@ -18,7 +18,7 @@ DARK_THEME: dict[str, str] = {
     "legend.labelcolor": "#CCCCCC",  # label
 
     "grid.color": "#505050",  # grid
-    # "text.color": "#202020",
+    "text.color": "#CCCCCC",  # text
 
     "xtick.color": "#CCCCCC",  # ruler (3D)
     "xtick.labelcolor": "#CCCCCC",  # scale (3D)
@@ -44,7 +44,7 @@ LIGHT_THEME: dict[str, str] = {
     "legend.labelcolor": "#000000",
 
     "grid.color": "#BDBDBD",
-    # "text.color": "#000000",
+    "text.color": "#000000",
 
     "xtick.color": "#000000",
     "xtick.labelcolor": "#000000",

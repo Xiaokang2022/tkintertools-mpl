@@ -41,11 +41,92 @@ Extension package for <code>tkintertools</code> to <code>matplotlib</code>
 pip install tkintertools-mpl
 ```
 
+> [!IMPORTANT]  
+> `tkintertools`: https://github.com/Xiaokang2022/tkintertools
+
 ### 👀 Preview / 预览
 
 ![preview-1](./preview-1.png)
+
+<details><summary>Code</summary>
+
+```python
+import math
+
+import matplotlib.figure
+import numpy
+import tkintertools
+import tkintertools.mpl
+import tkintertools.style
+
+tkintertools.mpl.set_mpl_default_theme(tkintertools.style.get_color_mode())
+
+x = numpy.linspace(-math.tau, math.tau, 100)
+y = numpy.sin(x)
+
+figure = matplotlib.figure.Figure()
+axes = figure.add_subplot()
+axes.plot(x, y)
+
+axes.set(xlabel='x', ylabel='y', title='Plotting based on the theme in tkt')
+axes.legend(["$y=sin(x)$"])
+axes.grid()
+
+root = tkintertools.Tk((960, 720), title="tkintertools-mpl")
+root.center()
+canvas = tkintertools.Canvas(root, zoom_item=True)
+canvas.place(width=960, height=720)
+figure_canvas = tkintertools.mpl.FigureCanvas(figure, canvas)
+toolbar = tkintertools.mpl.FigureToolbar(figure_canvas, canvas)
+figure_canvas.pack(side="top", fill="both", expand=True)
+
+root.mainloop()
+```
+
+</details>
+
 ![preview-2](./preview-2.png)
 
-### 🔗 Links / 相关链接
+<details><summary>Code</summary>
 
-* `tkintertools`: https://github.com/Xiaokang2022/tkintertools
+```python
+import matplotlib.figure
+import numpy
+import tkintertools
+import tkintertools.mpl
+import tkintertools.style
+
+tkintertools.mpl.set_mpl_default_theme(tkintertools.style.get_color_mode())
+
+figure = matplotlib.figure.Figure()
+axes = figure.add_subplot(projection='3d')
+
+colors = ['r', 'g', 'b', 'y']
+yticks = [3, 2, 1, 0]
+
+for c, k in zip(colors, yticks):
+    xs = numpy.arange(20)
+    ys = numpy.random.rand(20)
+    cs = [c] * len(xs)
+    cs[0] = 'c'
+    axes.bar(xs, ys, zs=k, zdir='y', color=cs, alpha=0.7)
+
+axes.set_xlabel('X')
+axes.set_ylabel('Y')
+axes.set_zlabel('Z')
+axes.set_title("3D plotting with interoperability")
+
+axes.set_yticks(yticks)
+
+root = tkintertools.Tk((960, 720), title="tkintertools-mpl")
+root.center()
+canvas = tkintertools.Canvas(root, zoom_item=True)
+canvas.place(width=960, height=720)
+figure_canvas = tkintertools.mpl.FigureCanvas(figure, canvas)
+toolbar = tkintertools.mpl.FigureToolbar(figure_canvas, canvas)
+figure_canvas.pack(side="top", fill="both", expand=True)
+
+root.mainloop()
+```
+
+</details>

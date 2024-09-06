@@ -2,6 +2,7 @@
 
 import inspect
 import tkinter
+import typing
 
 import matplotlib
 import matplotlib.backends._backend_tk
@@ -184,11 +185,11 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         return matplotlib.backends._backend_tk.NavigationToolbar2Tk.destroy(self)
 
 
-def set_mpl_default_theme(dark: bool) -> None:
+def set_mpl_default_theme(theme: typing.Literal["light", "dark"]) -> None:
     """
     Set default color constants of `matplotlib`
 
-    * `dark`: Wether it is dark mode
+    * `theme`: theme mode
     """
-    for key, value in DARK_THEME.items() if dark else LIGHT_THEME.items():
+    for key, value in DARK_THEME.items() if theme == "dark" else LIGHT_THEME.items():
         matplotlib.rcParams[key] = value
