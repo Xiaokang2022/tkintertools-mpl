@@ -20,7 +20,10 @@ __all__ = [
 ]
 
 
-def _forward_methods(source_object: object | type, target_object: object) -> None:
+def _forward_methods(
+    source_object: object | type,
+    target_object: object,
+) -> None:
     """
     Forward methods and attributes of one object to another object
 
@@ -35,7 +38,8 @@ def _forward_methods(source_object: object | type, target_object: object) -> Non
         setattr(target_object, name, value)
 
 
-class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanvasTkAgg):
+class FigureCanvas(
+        tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanvasTkAgg):
     """A canvas for interface of `matplotlib`"""
 
     def __init__(
@@ -50,8 +54,9 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
         * `master`: parent widget
         """
         self.figure = figure
-        self._TkAgg: matplotlib.backends.backend_tkagg.FigureCanvasTkAgg = \
+        self._TkAgg: matplotlib.backends.backend_tkagg.FigureCanvasTkAgg = (
             matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(figure, master)
+        )
 
         _forward_methods(self._TkAgg._tkcanvas, self)
         _forward_methods(self._TkAgg, self)
@@ -74,7 +79,8 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
             keys = key.split(".")
 
             match keys[0]:
-                case "figure": self.figure.set(**{keys[-1]: value})
+                case "figure":
+                    self.figure.set(**{keys[-1]: value})
                 case "grid":
                     for axes in self.figure.axes:
                         # NOTE: A private approach is used,
@@ -88,8 +94,11 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
                 case "axes":
                     for axes in self.figure.axes:
                         if keys[-1] == "labelcolor":
-                            for attr in ("xaxis", "yaxis", "zaxis") if isinstance(
-                                    axes, mpl_toolkits.mplot3d.Axes3D) else ("xaxis", "yaxis"):
+                            for attr in (
+                                ("xaxis", "yaxis", "zaxis")
+                                if isinstance(axes, mpl_toolkits.mplot3d.Axes3D)
+                                else ("xaxis", "yaxis")
+                            ):
                                 getattr(axes, attr).label.set_color(value)
                         elif keys[-1] == "titlecolor":
                             axes.title.set_color(value)
@@ -97,8 +106,11 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
                             axes.patch.set(**{keys[-1]: value})
                 case "xtick":
                     for axes in self.figure.axes:
-                        for attr in ("xaxis", "yaxis", "zaxis") if isinstance(
-                                axes, mpl_toolkits.mplot3d.Axes3D) else ("xaxis",):
+                        for attr in (
+                            ("xaxis", "yaxis", "zaxis")
+                            if isinstance(axes, mpl_toolkits.mplot3d.Axes3D)
+                            else ("xaxis",)
+                        ):
                             if keys[-1] == "color":
                                 getattr(axes, attr).set_tick_params(
                                     colors=value)
@@ -136,8 +148,9 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         """
         * `canvas`: the figure canvas on which to operate
         * `master`: parent widget
-        * `pack_toolbar`: if True, add the toolbar to the parent's pack manager's
-        packing list during initialization with `side="bottom"` and `fill="x"`.
+        * `pack_toolbar`: if True, add the toolbar to the parent's pack
+        manager's packing list during initialization with `side="bottom"` and
+        `fill="x"`.
 
         TIPS:
 
@@ -147,7 +160,8 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         if isinstance(master, FigureCanvas):
             master = master._TkAgg._tkcanvas
         matplotlib.backends._backend_tk.NavigationToolbar2Tk.__init__(
-            self, canvas._TkAgg, master, pack_toolbar=pack_toolbar)
+            self, canvas._TkAgg, master, pack_toolbar=pack_toolbar
+        )
         self.configure(**kwargs)
         self.update()
         tkintertools.style.manager.register_event(self._theme)
@@ -182,7 +196,8 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
     # @typing.override
     def destroy(self) -> None:
         tkintertools.style.manager.remove_event(self._theme)
-        return matplotlib.backends._backend_tk.NavigationToolbar2Tk.destroy(self)
+        return matplotlib.backends._backend_tk.NavigationToolbar2Tk.destroy(
+            self)
 
 
 def set_mpl_default_theme(theme: typing.Literal["light", "dark"]) -> None:
@@ -191,5 +206,6 @@ def set_mpl_default_theme(theme: typing.Literal["light", "dark"]) -> None:
 
     * `theme`: theme mode
     """
-    for key, value in DARK_THEME.items() if theme == "dark" else LIGHT_THEME.items():
+    for key, value in DARK_THEME.items() \
+            if theme == "dark" else LIGHT_THEME.items():
         matplotlib.rcParams[key] = value
