@@ -43,6 +43,7 @@ pip install tkintertools-mpl
 
 > [!IMPORTANT]  
 > `tkintertools`: https://github.com/Xiaokang2022/tkintertools
+> Require Version: `3.0.0rc2`
 
 ### 👀 Preview / 预览
 
