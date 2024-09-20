@@ -1,5 +1,5 @@
 """
-extension package for tkintertools to matplotlib
+Extension package for tkintertools to matplotlib
 
 Provides:
 
@@ -32,5 +32,5 @@ Provides:
 
 from .main import *
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 __author__ = "Xiaokang2022 <2951256653@qq.com>"

@@ -13,8 +13,25 @@ Changelog / 更新日志
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+🔖 `1.2.0`
+----------
+
+🕓 *Release Date / 发布日期 : 2024-09-21*
+
+🟡 **Changed / 变更**
+
+- The first and second parameters of the classes `FigureCanvas` and `FigureToolbar` swap positions to conform to the order of the parameters of the other canvas classes  
+类 `FigureCanvas` 和 `FigureToolbar` 的第一个与第二个参数交换位置，以符合其它画布类的参数顺序
+
+🟣 **Fixed / 修复**
+
+- Fixed some incorrect docstrings  
+修复了一些错误的文档字符串
+
 🔖 `1.1.1`
 ----------
+
+🕓 *Release Date / 发布日期 : 2024-09-16*
 
 🟡 **Changed / 变更**
 

@@ -9,9 +9,10 @@ import matplotlib.backends._backend_tk
 import matplotlib.backends.backend_tkagg
 import matplotlib.figure
 import mpl_toolkits.mplot3d
-import tkintertools.style.manager
+import typing_extensions
+from tkintertools.style import manager
 
-from .constants import DARK_THEME, LIGHT_THEME
+from . import constants
 
 __all__ = [
     "FigureCanvas",
@@ -44,27 +45,26 @@ class FigureCanvas(
 
     def __init__(
         self,
-        figure: matplotlib.figure.Figure,
         master: tkinter.Misc,
+        figure: matplotlib.figure.Figure,
         *args,
         **kwargs,
     ) -> None:
         """
-        * `figure`: a `Figure` object from `matplotlib`
         * `master`: parent widget
+        * `figure`: a `Figure` object from `matplotlib`
         """
         self.figure = figure
-        self._TkAgg: matplotlib.backends.backend_tkagg.FigureCanvasTkAgg = (
-            matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(figure, master)
-        )
+        self._TkAgg: matplotlib.backends.backend_tkagg.FigureCanvasTkAgg \
+            = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(figure, master)
 
         _forward_methods(self._TkAgg._tkcanvas, self)
         _forward_methods(self._TkAgg, self)
 
         self.configure(*args, **kwargs)
         self.bind("<Configure>", self._fix_size, "+")
-        tkintertools.style.manager.register_event(self._theme)
-        self._theme(tkintertools.style.manager.get_color_mode() == "dark")
+        manager.register_event(self._theme)
+        self._theme(manager.get_color_mode() == "dark")
 
     def _fix_size(self, event: tkinter.Event) -> None:
         """Correct the size of Figure"""
@@ -74,8 +74,9 @@ class FigureCanvas(
     def _theme(self, dark: bool) -> None:
         """Change the color theme of the Figure"""
         self.update()
+        theme = constants.DARK_THEME if dark else constants.LIGHT_THEME
 
-        for key, value in DARK_THEME.items() if dark else LIGHT_THEME.items():
+        for key, value in theme.items():
             keys = key.split(".")
 
             match keys[0]:
@@ -127,10 +128,12 @@ class FigureCanvas(
                                         spine.set_color(value)
         self.draw()
 
-    # @typing.override
+    @typing_extensions.override
     def destroy(self) -> None:
+        for axis in self.figure.get_axes():
+            axis.cla()
         self.figure.clf()
-        tkintertools.style.manager.remove_event(self._theme)
+        manager.remove_event(self._theme)
         return self._TkAgg.get_tk_widget().destroy()
 
 
@@ -139,15 +142,15 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
 
     def __init__(
         self,
-        canvas: FigureCanvas,
-        master: tkinter.Misc | FigureCanvas | None = None,
+        master: tkinter.Misc | FigureCanvas,
+        figure_canvas: FigureCanvas | None = None,
         *,
         pack_toolbar: bool = True,
         **kwargs,
     ) -> None:
         """
-        * `canvas`: the figure canvas on which to operate
         * `master`: parent widget
+        * `figure_canvas`: the figure canvas on which to operate
         * `pack_toolbar`: if True, add the toolbar to the parent's pack
         manager's packing list during initialization with `side="bottom"` and
         `fill="x"`.
@@ -157,15 +160,17 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         If you want to use the toolbar with a different layout manager,
         use `pack_toolbar=False`
         """
+        if figure_canvas is None:
+            figure_canvas = master
         if isinstance(master, FigureCanvas):
             master = master._TkAgg._tkcanvas
         matplotlib.backends._backend_tk.NavigationToolbar2Tk.__init__(
-            self, canvas._TkAgg, master, pack_toolbar=pack_toolbar
+            self, figure_canvas._TkAgg, master, pack_toolbar=pack_toolbar
         )
         self.configure(**kwargs)
         self.update()
-        tkintertools.style.manager.register_event(self._theme)
-        self._theme(tkintertools.style.manager.get_color_mode() == "dark")
+        manager.register_event(self._theme)
+        self._theme(manager.get_color_mode() == "dark")
 
     def _theme(self, dark: bool) -> None:
         """Change the color theme of the Toolbar"""
@@ -193,9 +198,9 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
 
         self._rescale()
 
-    # @typing.override
+    @typing_extensions.override
     def destroy(self) -> None:
-        tkintertools.style.manager.remove_event(self._theme)
+        manager.remove_event(self._theme)
         return matplotlib.backends._backend_tk.NavigationToolbar2Tk.destroy(
             self)
 
@@ -206,6 +211,6 @@ def set_mpl_default_theme(theme: typing.Literal["light", "dark"]) -> None:
 
     * `theme`: theme mode
     """
-    for key, value in DARK_THEME.items() \
-            if theme == "dark" else LIGHT_THEME.items():
+    for key, value in constants.DARK_THEME.items() \
+            if theme == "dark" else constants.LIGHT_THEME.items():
         matplotlib.rcParams[key] = value
