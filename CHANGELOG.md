@@ -13,6 +13,21 @@ Changelog / 更新日志
 > * 🟠 **Deprecated / 弃用**
 > * 🟤 **Refactored / 重构**
 
+🔖 `1.2.1`
+----------
+
+🕓 *Release Date / 发布日期 : 2024-10-12*
+
+🟡 **Changed / 变更**
+
+- Submodule `constants` renamed to `_constants`  
+子模块 `constants` 重命名为 `_constants`
+
+🟢 **Added / 新增**
+
+- The function `set_mpl_default_theme` added the parameter `apply_font` to specify whether to use the font of `tkintertools`  
+函数 `set_mpl_default_theme` 新增参数 `apply_font` 来指定是否使用 `tkintertools` 的字体
+
 🔖 `1.2.0`
 ----------
 

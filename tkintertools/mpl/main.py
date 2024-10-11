@@ -10,9 +10,10 @@ import matplotlib.backends.backend_tkagg
 import matplotlib.figure
 import mpl_toolkits.mplot3d
 import typing_extensions
+from tkintertools.core import constants
 from tkintertools.style import manager
 
-from . import constants
+from . import _constants
 
 __all__ = [
     "FigureCanvas",
@@ -74,9 +75,9 @@ class FigureCanvas(
     def _theme(self, dark: bool) -> None:
         """Change the color theme of the Figure"""
         self.update()
-        theme = constants.DARK_THEME if dark else constants.LIGHT_THEME
+        style = _constants.DARK_THEME if dark else _constants.LIGHT_THEME
 
-        for key, value in theme.items():
+        for key, value in style.items():
             keys = key.split(".")
 
             match keys[0]:
@@ -126,7 +127,7 @@ class FigureCanvas(
                                 for k, spine in axes.spines.items():
                                     if k in ("right", "left"):
                                         spine.set_color(value)
-        self.draw()
+        self.draw_idle()
 
     @typing_extensions.override
     def destroy(self) -> None:
@@ -205,12 +206,20 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
             self)
 
 
-def set_mpl_default_theme(theme: typing.Literal["light", "dark"]) -> None:
+def set_mpl_default_theme(
+    theme: typing.Literal["light", "dark"],
+    *,
+    apply_font: bool = False,
+) -> None:
     """
     Set default color constants of `matplotlib`
 
     * `theme`: theme mode
+    * `apply_font`: whether to use the font of `tkintertools`
     """
-    for key, value in constants.DARK_THEME.items() \
-            if theme == "dark" else constants.LIGHT_THEME.items():
+    for key, value in _constants.DARK_THEME.items() \
+            if theme == "dark" else _constants.LIGHT_THEME.items():
         matplotlib.rcParams[key] = value
+    if apply_font:
+        matplotlib.rcParams['axes.unicode_minus'] = False
+        matplotlib.rcParams["font.family"] = constants.FONT
