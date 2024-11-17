@@ -10,7 +10,7 @@ import matplotlib.backends.backend_tkagg
 import matplotlib.figure
 import mpl_toolkits.mplot3d
 import typing_extensions
-from tkintertools.core import constants
+from tkintertools.core import configs
 from tkintertools.style import manager
 
 from . import _constants
@@ -222,4 +222,4 @@ def set_mpl_default_theme(
         matplotlib.rcParams[key] = value
     if apply_font:
         matplotlib.rcParams['axes.unicode_minus'] = False
-        matplotlib.rcParams["font.family"] = constants.FONT
+        matplotlib.rcParams["font.family"] = configs.Font.family
