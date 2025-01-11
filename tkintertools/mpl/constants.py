@@ -1,5 +1,7 @@
 """Constants for theme"""
 
+from __future__ import annotations
+
 DARK_THEME: dict[str, str] = {
     "axes.edgecolor": "#AAAAAA",  # outline
     "axes.facecolor": "#202020",  # internal

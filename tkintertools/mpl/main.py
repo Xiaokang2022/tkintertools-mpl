@@ -1,5 +1,13 @@
 """APIs for Matplotlib"""
 
+from __future__ import annotations
+
+__all__ = [
+    "FigureCanvas",
+    "FigureToolbar",
+    "set_mpl_default_theme",
+]
+
 import inspect
 import tkinter
 import typing
@@ -15,29 +23,20 @@ from tkintertools.theme import manager
 
 from . import constants
 
-__all__ = [
-    "FigureCanvas",
-    "FigureToolbar",
-    "set_mpl_default_theme",
-]
 
+def _forward_methods(src_obj: object | type, tgt_obj: object) -> None:
+    """Forward methods and attributes of one object to another object.
 
-def _forward_methods(
-    source_object: object | type,
-    target_object: object,
-) -> None:
+    * `src_obj`: the source object, that is, the forwarded object
+    * `tgt_obj`: the target object, that is, the object to be forwarded
     """
-    Forward methods and attributes of one object to another object
+    if inspect.isclass(src_obj):
+        src_obj = src_obj.__class__
 
-    * `source_object`: the source object, that is, the forwarded object
-    * `target_object`: the target object, that is, the object to be forwarded
-    """
-    if inspect.isclass(source_object):
-        source_object = source_object.__class__
-    for name, value in inspect.getmembers(source_object, inspect.ismethod):
-        setattr(target_object, name, value)
-    for name, value in inspect.getmembers(source_object, inspect.isfunction):
-        setattr(target_object, name, value)
+    for name, value in inspect.getmembers(src_obj, inspect.ismethod):
+        setattr(tgt_obj, name, value)
+    for name, value in inspect.getmembers(src_obj, inspect.isfunction):
+        setattr(tgt_obj, name, value)
 
 
 class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanvasTkAgg):
@@ -63,16 +62,19 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
 
         self.configure(*args, **kwargs)
         self.bind("<Configure>", self._fix_size, "+")
-        manager.register_event(self._theme)
-        self._theme(manager.get_color_mode())
+        manager.register_event(self.theme)
+        self.theme(manager.get_color_mode())
 
     def _fix_size(self, event: tkinter.Event) -> None:
-        """Correct the size of Figure"""
+        """Correct the size of Figure."""
         self.update()
         self.resize(event)
 
-    def _theme(self, theme: typing.Literal["light", "dark"]) -> None:
-        """Change the color theme of the Figure"""
+    def theme(self, theme: typing.Literal["light", "dark"]) -> None:
+        """Change the color theme of the Figure.
+
+        * `theme`: the theme name
+        """
         self.update()
         style = constants.DARK_THEME if theme == "dark" else constants.LIGHT_THEME
 
@@ -132,8 +134,9 @@ class FigureCanvas(tkinter.Canvas, matplotlib.backends.backend_tkagg.FigureCanva
     def destroy(self) -> None:
         for axis in self.figure.get_axes():
             axis.cla()
+
         self.figure.clf()
-        manager.remove_event(self._theme)
+        manager.remove_event(self.theme)
         return self._TkAgg.get_tk_widget().destroy()
 
 
@@ -155,8 +158,6 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         manager's packing list during initialization with `side="bottom"` and
         `fill="x"`.
 
-        TIPS:
-
         If you want to use the toolbar with a different layout manager,
         use `pack_toolbar=False`
         """
@@ -169,11 +170,14 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
         )
         self.configure(**kwargs)
         self.update()
-        manager.register_event(self._theme)
-        self._theme(manager.get_color_mode())
+        manager.register_event(self.theme)
+        self.theme(manager.get_color_mode())
 
-    def _theme(self, theme: typing.Literal["light", "dark"]) -> None:
-        """Change the color theme of the Toolbar"""
+    def theme(self, theme: typing.Literal["light", "dark"]) -> None:
+        """Change the color theme of the Toolbar.
+
+        * `theme`: the theme name
+        """
         if theme == "dark":
             self["bg"] = "#303030"
             for name, child in self.children.items():
@@ -200,7 +204,7 @@ class FigureToolbar(matplotlib.backends._backend_tk.NavigationToolbar2Tk):
 
     @typing_extensions.override
     def destroy(self) -> None:
-        manager.remove_event(self._theme)
+        manager.remove_event(self.theme)
         return matplotlib.backends._backend_tk.NavigationToolbar2Tk.destroy(self)
 
 
@@ -209,15 +213,19 @@ def set_mpl_default_theme(
     *,
     apply_font: bool = False,
 ) -> None:
-    """
-    Set default color constants of `matplotlib`
+    """Set default color constants of `matplotlib`.
 
     * `theme`: theme mode
     * `apply_font`: whether to use the font of `tkintertools`
     """
-    for key, value in constants.DARK_THEME.items() \
-            if theme == "dark" else constants.LIGHT_THEME.items():
+    if theme == "dark":
+        data = constants.DARK_THEME.items()
+    else:
+        data = constants.LIGHT_THEME.items()
+
+    for key, value in data:
         matplotlib.rcParams[key] = value
+
     if apply_font:
         matplotlib.rcParams['axes.unicode_minus'] = False
         matplotlib.rcParams["font.family"] = configs.Font.family
