@@ -1,6 +1,8 @@
 <h1 align="center">tkintertools-mpl</h1>
 
-<p align="center">Extension package for <code>tkintertools</code> to <code>matplotlib</code></p>
+<p align="center"><a title="Official Website" href="https://xiaokang2022.github.io/tkintertools/">https://xiaokang2022.github.io/tkintertools/</a></p>
+
+<p align="center">Extension package of <code>tkintertools</code> for <code>matplotlib</code></p>
 
 <p align="center">
 <a href="https://github.com/Xiaokang2022/tkintertools-mpl/releases"><img alt="Version" src="https://img.shields.io/github/v/release/Xiaokang2022/tkintertools-mpl?include_prereleases&logo=github&label=Version" title="Latest Version" /></a>
@@ -33,12 +35,9 @@
 📦 Installation
 ---------------
 
-```
+```shell
 pip install tkintertools-mpl
 ```
-
-> [!IMPORTANT]  
-> `tkintertools`: https://github.com/Xiaokang2022/tkintertools
 
 ### 👀 Preview
 
@@ -51,10 +50,9 @@ import matplotlib.figure
 import numpy
 
 import tkintertools
-import tkintertools.mpl as mpl
-import tkintertools.style as style
+from tkintertools import mpl, theme
 
-mpl.set_mpl_default_theme(style.get_color_mode())
+mpl.set_mpl_default_theme(theme.get_color_mode())
 
 x = numpy.linspace(-math.tau, math.tau, 100)
 y = numpy.sin(x)
@@ -69,7 +67,7 @@ axes.grid()
 
 root = tkintertools.Tk((960, 720), title="tkintertools-mpl")
 root.center()
-canvas = tkintertools.Canvas(root, zoom_item=True)
+canvas = tkintertools.Canvas(auto_zoom=True)
 canvas.place(width=960, height=720)
 figure_canvas = mpl.FigureCanvas(canvas, figure)
 toolbar = mpl.FigureToolbar(canvas, figure_canvas)
@@ -85,10 +83,9 @@ import matplotlib.figure
 import numpy
 
 import tkintertools
-import tkintertools.mpl as mpl
-import tkintertools.style as style
+from tkintertools import mpl, theme
 
-mpl.set_mpl_default_theme(style.get_color_mode())
+mpl.set_mpl_default_theme(theme.get_color_mode())
 
 figure = matplotlib.figure.Figure()
 axes = figure.add_subplot(projection='3d')
@@ -112,7 +109,7 @@ axes.set_yticks(yticks)
 
 root = tkintertools.Tk((960, 720), title="tkintertools-mpl")
 root.center()
-canvas = tkintertools.Canvas(root, zoom_item=True)
+canvas = tkintertools.Canvas(auto_update=True)
 canvas.place(width=960, height=720)
 figure_canvas = mpl.FigureCanvas(canvas, figure)
 toolbar = mpl.FigureToolbar(canvas, figure_canvas)

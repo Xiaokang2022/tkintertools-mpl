@@ -1,5 +1,5 @@
 """
-Extension package for tkintertools to matplotlib
+Extension package of tkintertools for matplotlib
 
 Provides:
 
