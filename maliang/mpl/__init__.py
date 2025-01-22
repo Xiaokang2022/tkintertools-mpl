@@ -1,5 +1,4 @@
-"""
-Extension package of tkintertools for matplotlib
+"""Extension package of `maliang` for `matplotlib`.
 
 Provides:
 

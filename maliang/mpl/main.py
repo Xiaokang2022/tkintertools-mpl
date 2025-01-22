@@ -18,8 +18,8 @@ import matplotlib.backends.backend_tkagg
 import matplotlib.figure
 import mpl_toolkits.mplot3d
 import typing_extensions
-from tkintertools.core import configs
-from tkintertools.theme import manager
+from maliang.core import configs
+from maliang.theme import manager
 
 from . import constants
 
@@ -216,7 +216,7 @@ def set_mpl_default_theme(
     """Set default color constants of `matplotlib`.
 
     * `theme`: theme mode
-    * `apply_font`: whether to use the font of `tkintertools`
+    * `apply_font`: whether to use the font of `maliang`
     """
     if theme == "dark":
         data = constants.DARK_THEME.items()

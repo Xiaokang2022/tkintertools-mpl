@@ -3,14 +3,14 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tkintertools-mpl"
+name = "maliang-mpl"
 authors = [{ name = "Xiaokang2022", email = "2951256653@qq.com" }]
 maintainers = [{ name = "Xiaokang2022", email = "2951256653@qq.com" }]
-description = "Extension package for tkintertools to matplotlib"
+description = "Extension package for maliang to matplotlib"
 readme = "README.md"
 license = { text = "MIT License" }
 requires-python = ">=3.10"
-keywords = ["tkinter", "tkintertools", "matplotlib", "cross-platform", "themed"]
+keywords = ["tkinter", "maliang", "matplotlib", "cross-platform", "themed"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -22,20 +22,20 @@ classifiers = [
 ]
 dependencies = [
     "typing-extensions",
-    "tkintertools>=3.0.0rc6",
+    "maliang>=3.0.0rc6",
     "matplotlib >= 3.7.0",
 ]
 dynamic = ["version"]
 
 [project.urls]
-"Bug tracker" = "https://github.com/Xiaokang2022/tkintertools-mpl/issues"
-"Source code" = "https://github.com/Xiaokang2022/tkintertools-mpl"
+"Bug tracker" = "https://github.com/Xiaokang2022/maliang-mpl/issues"
+"Source code" = "https://github.com/Xiaokang2022/maliang-mpl"
 
 [tool.setuptools.dynamic]
-version = { attr = "tkintertools.mpl.__version__" }
+version = { attr = "maliang.mpl.__version__" }
 
 [tool.setuptools.packages.find]
-include = ["tkintertools*"]
+include = ["maliang*"]
 
 [tool.pylint]
 output-format = "colorized"
